@@ -182,17 +182,16 @@ class TealiumData extends AbstractHelper{
                 $outputArray['product_name'] = array();
             }
 
-            if (!(
-            $outputArray['product_brand'] = array(
-                $_product->getBrand()
-            )
-            )) {
-                $outputArray['product_brand'] = array();
+            $manufacturer = $_product->getAttributeText('manufacturer');
+            if ($manufacturer === false){
+                $outputArray['product_brand'] = array("");
+            } else {
+                $outputArray['product_brand'] = array($manufacturer);
             }
 
             if (!(
             $outputArray['product_unit_price'] = array(
-                number_format($_product->getSpecialPrice(), 2)
+                number_format($_product->getFinalPrice(), 2)
             )
             )) {
                 $outputArray['product_unit_price'] = array();
@@ -224,19 +223,19 @@ class TealiumData extends AbstractHelper{
                     $this->_registry->registry('current_category')->getName()
                 );
             } else {
-                $cats = $_product->getCategoryIds();
-                if(count($cats) ){
-                    $firstCategoryId = $cats[0];
-                    $_category = $this->_objectManager->create('Magento\Catalog\Model\Category')->load($firstCategoryId);
-                    $outputArray['product_category'] = array(
-                        $_category->getName()
-                    );
-                } else {
-                    $outputArray['product_category'] = array();
-                }
+                $outputArray['product_category'] = array("");
             }
         } else {
-            $outputArray['product_category'] = array();
+            $cats = $_product->getCategoryIds();
+            if(count($cats) ){
+                $firstCategoryId = $cats[0];
+                $_category = $this->_objectManager->create('Magento\Catalog\Model\Category')->load($firstCategoryId);
+                $outputArray['product_category'] = array(
+                    $_category->getName()
+                );
+            } else {
+                $outputArray['product_category'] = array("");
+            }
         }
 
         return $outputArray;
