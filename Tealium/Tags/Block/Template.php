@@ -15,13 +15,21 @@ class Template extends \Magento\Framework\View\Element\Template{
     protected $_tealiumType;
     protected $_tealiumName;
 
+    /**
+     * @var \Magento\Framework\Registry
+     */
+
+    protected $_registry;
+
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\ObjectManagerInterface $objectManager,
+        \Magento\Framework\Registry $registry,
         array $data = []
     )
     {
         $this->_objectManager = $objectManager;
+        $this->_registry = $registry;
         parent::__construct($context, $data);
     }
 
@@ -47,5 +55,9 @@ class Template extends \Magento\Framework\View\Element\Template{
 
     public function getTealiumName(){
         return $this->_tealiumName;
+    }
+
+    public function getRegestry(){
+        return $this->_registry;
     }
 }

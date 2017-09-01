@@ -200,7 +200,7 @@ class TealiumData extends AbstractHelper{
 
             if (!(
             $outputArray['product_list_price'] = array(
-                number_format($_product->getPrice(), 2)
+                number_format($_product->getData('price'), 2)
             )
             )) {
                 $outputArray['product_list_price'] = array();
@@ -224,7 +224,16 @@ class TealiumData extends AbstractHelper{
                     $this->_registry->registry('current_category')->getName()
                 );
             } else {
-                $outputArray['product_category'] = array();
+                $cats = $_product->getCategoryIds();
+                if(count($cats) ){
+                    $firstCategoryId = $cats[0];
+                    $_category = $this->_objectManager->create('Magento\Catalog\Model\Category')->load($firstCategoryId);
+                    $outputArray['product_category'] = array(
+                        $_category->getName()
+                    );
+                } else {
+                    $outputArray['product_category'] = array();
+                }
             }
         } else {
             $outputArray['product_category'] = array();
@@ -268,7 +277,7 @@ class TealiumData extends AbstractHelper{
         $outputArray['site_currency'] = $store->getCurrentCurrencyCode() ? : "";
         $outputArray['page_name'] =
             $page->getLayout()->getBlock('page.main.title')->getPageTitle() ? : "";
-        $outputArray['page_type'] = "checkout";
+        $outputArray['page_type'] = "cart";
 
         // THE FOLLOWING NEEDS TO BE MATCHED ARRAYS (SAME NUMBER OF ELEMENTS)
         $outputArray['product_id'] = $checkout_ids ? : array();
@@ -378,7 +387,7 @@ class TealiumData extends AbstractHelper{
             $this->_objectManager->get('Magento\Framework\Locale\Resolver')->getLocale() ? : "";
         $outputArray['site_currency'] = $store->getCurrentCurrencyCode() ? : "";
         $outputArray['page_name'] = "cart success";
-        $outputArray['page_type'] = "cart";
+        $outputArray['page_type'] = "order";
         $outputArray['order_id'] = $order->getIncrementId() ? : "";
         $outputArray['order_discount'] =
             number_format($order->getDiscountAmount(), 2, ".", "") ? : "";

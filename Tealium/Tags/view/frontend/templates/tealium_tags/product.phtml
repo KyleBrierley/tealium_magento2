@@ -32,3 +32,26 @@ if ($helper->getIsExternalScript($store)) {
 // will send the url encoded udo to a specified server if the feature is
 // enabled in the config.
 echo $helper->getDiagnosticTag($store);
+
+if ($this->getRegestry()->registry('current_product')->getTypeId() == 'configurable'):
+    ?>
+
+    <script type="text/javascript">
+        require(['jquery'],function($){
+            $(function(){
+                $('[data-role=priceBox]').on('updatePrice',function(event){
+                    var oldPrice = event.target.innerText;
+                    var newPrice = oldPrice.substring(1);
+                    newPrice.replace(/\n/g, "");
+                    console.log(newPrice);
+                    var oldUDO = utag_data;
+                    oldUDO.product_price = [newPrice];
+                    utag.view(oldUDO);
+                })
+            })
+        });
+    </script>
+
+<?
+
+endif;
