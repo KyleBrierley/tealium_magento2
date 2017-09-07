@@ -225,7 +225,7 @@ class TealiumData extends AbstractHelper{
             } else {
                 $outputArray['product_category'] = array("");
             }
-        } else {
+        } elseif($_product) {
             $cats = $_product->getCategoryIds();
             if(count($cats) ){
                 $firstCategoryId = $cats[0];
